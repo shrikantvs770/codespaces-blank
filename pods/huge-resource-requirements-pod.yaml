@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-requirements-pod
+spec:
+  containers:
+    - image: sonarqube:latest
+      name: apna-nginx
+      resources:
+        limits:
+          memory: "1024G"
+          cpu: "2000"
+        requests:
+          memory: "1024G"
+          cpu: "1000"

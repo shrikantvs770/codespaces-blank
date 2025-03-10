@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-nginx-pod
+  labels:
+    tier: frontend
+spec:
+  containers:
+    - name: hello-nginx-container
+      image: nginxdemos/hello

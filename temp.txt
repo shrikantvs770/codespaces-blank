@@ -1,0 +1,53 @@
+kubectl proxy &
+curl -X GET http://127.0.0.1:8001/api/v1/pods;
+
+kubectl create namespace minensp --dry-run=client -o yaml
+
+curl -X POST http://127.0.0.1:8001/apis/v1/namespaces -H 'Content-Type: application/yaml' --data "
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: minensp
+spec: {}
+status: {}
+"
+
+#Deployment
+kubectl create deployment my-nginx --image=nginx:alpine -n minensp --dry-run=client -o yaml > temp_dep.yaml
+
+Copy the content from temp_dep.yaml file, We will use it for curl
+
+
+
+curl -X POST http://127.0.0.1:8001/apis/apps/v1/namespaces/minensp/deployments -H 'Content-Type: application/yaml' --data "
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: my-nginx
+  name: my-nginx
+  namespace: minensp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nginx
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: my-nginx
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+        resources: {}
+status: {}
+"
+
+
+kubectl get pods -n minensp
+

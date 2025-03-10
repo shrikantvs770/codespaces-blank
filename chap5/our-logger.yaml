@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rndm-lger
+  namespace : kube-public
+spec:
+  containers:
+  - name: rndm-lger-container
+    image: chentex/random-logger

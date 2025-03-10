@@ -1,0 +1,289 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"name":"commandpod","namespace":"default"},"spec":{"containers":[{"command":["bash","-c","date"],"image":"ubuntu:latest","name":"apna-ubuntu"}],"restartPolicy":"Never"}}
+    creationTimestamp: "2024-11-18T10:30:10Z"
+    name: commandpod
+    namespace: default
+    resourceVersion: "5275"
+    uid: fbc5ba13-6e90-4e56-8657-081ba77a148a
+  spec:
+    containers:
+    - command:
+      - bash
+      - -c
+      - date
+      image: ubuntu:latest
+      imagePullPolicy: Always
+      name: apna-ubuntu
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xv2wc
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Never
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-xv2wc
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T10:30:16Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T10:30:10Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T10:30:10Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T10:30:10Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T10:30:10Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://cb195a8ac0523bf107f5e9b359cbfb5753fc16ee3db7b1f7e7438f6215acdc34
+      image: ubuntu:latest
+      imageID: docker-pullable://ubuntu@sha256:278628f08d4979fb9af9ead44277dbc9c92c2465922310916ad0c46ec9999295
+      lastState: {}
+      name: apna-ubuntu
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://cb195a8ac0523bf107f5e9b359cbfb5753fc16ee3db7b1f7e7438f6215acdc34
+          exitCode: 0
+          finishedAt: "2024-11-18T10:30:13Z"
+          reason: Completed
+          startedAt: "2024-11-18T10:30:13Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xv2wc
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    phase: Succeeded
+    qosClass: BestEffort
+    startTime: "2024-11-18T10:30:10Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"name":"multi-container-pod","namespace":"default"},"spec":{"containers":[{"image":"sonarqube:latest","name":"sonar","ports":[{"containerPort":9000}],"resources":{"limits":{"cpu":"2","memory":"7000M"},"requests":{"cpu":"2","memory":"1024M"}}},{"image":"nginx:alpine","name":"apna-nginx","ports":[{"containerPort":80}],"resources":{"limits":{"cpu":"0.5","memory":"1024M"},"requests":{"cpu":"0.5","memory":"64M"}}}]}}
+    creationTimestamp: "2024-11-18T09:38:55Z"
+    name: multi-container-pod
+    namespace: default
+    resourceVersion: "5368"
+    uid: 76894f2d-6461-4cc7-b7bb-c63245f980c1
+  spec:
+    containers:
+    - image: sonarqube:latest
+      imagePullPolicy: Always
+      name: sonar
+      ports:
+      - containerPort: 9000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: "2"
+          memory: 7G
+        requests:
+          cpu: "2"
+          memory: 1024M
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-pz5tb
+        readOnly: true
+    - image: nginx:alpine
+      imagePullPolicy: IfNotPresent
+      name: apna-nginx
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1024M
+        requests:
+          cpu: 500m
+          memory: 64M
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-pz5tb
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-pz5tb
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-19T09:04:51Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T09:38:55Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-19T09:04:51Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-19T09:04:51Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-11-18T09:38:55Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://12754a50eefc82a983a89a390dbdfd855c19a9b934be629494aab74641f9daba
+      image: nginx:alpine
+      imageID: docker-pullable://nginx@sha256:74175cf34632e88c6cfe206897cbfe2d2fecf9bf033c40e7f9775a3689e8adc7
+      lastState:
+        terminated:
+          containerID: docker://ea132036a91687d1581b32a7eb86a38e251357d531e4e5da09dfaf3b6f42252b
+          exitCode: 255
+          finishedAt: "2024-11-19T09:04:28Z"
+          reason: Error
+          startedAt: "2024-11-18T10:20:53Z"
+      name: apna-nginx
+      ready: true
+      restartCount: 2
+      started: true
+      state:
+        running:
+          startedAt: "2024-11-19T09:04:51Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-pz5tb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    - containerID: docker://ba0bd06ce04ee0831bf7769d9a919074f366800f49b813ac6758908a565800c8
+      image: sonarqube:latest
+      imageID: docker-pullable://sonarqube@sha256:0842dcd4c8f851ce44f8edaf45ac93f7c9079017d60d99f614663e60cef5efe9
+      lastState:
+        terminated:
+          containerID: docker://11247eb88f80c8a44f1580c784624f207e05705da5a7902255d14ed8494ca2a6
+          exitCode: 255
+          finishedAt: "2024-11-19T09:04:28Z"
+          reason: Error
+          startedAt: "2024-11-18T10:20:51Z"
+      name: sonar
+      ready: true
+      restartCount: 2
+      started: true
+      state:
+        running:
+          startedAt: "2024-11-19T09:04:50Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-pz5tb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    phase: Running
+    podIP: 10.244.0.15
+    podIPs:
+    - ip: 10.244.0.15
+    qosClass: Burstable
+    startTime: "2024-11-18T09:38:55Z"
+kind: List
+metadata:
+  resourceVersion: ""

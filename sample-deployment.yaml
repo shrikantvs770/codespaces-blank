@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app: frontend
+    ddsfesc: set imaone
+    deployment.kubernetes.io/change-cause: Updated image to v2
+    deployment.kubernetes.io/revision: "14"
+    desc: set imaone
+    description: my frontend running nginx
+    environment: production
+    kubernetes.io/change-cause: We have changed version of nginx from latest to bookworm
+    version: v2
+    version/v1: hi2
+  creationTimestamp: "2024-11-08T05:23:39Z"
+  generation: 42
+  labels:
+    app: kubeserve
+  name: kubeserve
+  namespace: default
+  resourceVersion: "59033"
+  uid: 40c3d40d-f0a5-4220-891c-79af34ff6c0c
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: kubeserve
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kubeserve
+    spec:
+      containers:
+      - image: bookworm
+        imagePullPolicy: Always
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2024-11-08T13:46:33Z"
+    lastUpdateTime: "2024-11-08T13:46:33Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2024-11-08T13:46:33Z"
+    lastUpdateTime: "2024-11-08T13:59:46Z"
+    message: ReplicaSet "kubeserve-7c5d74bd98" is progressing.
+    reason: ReplicaSetUpdated
+    status: "True"
+    type: Progressing
+  observedGeneration: 42
+  readyReplicas: 1
+  replicas: 2
+  unavailableReplicas: 1
+  updatedReplicas: 1

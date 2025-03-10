@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: commandpod
+spec:
+  restartPolicy: Never
+  containers:
+    - image: ubuntu:latest
+      name: apna-ubuntu
+      command: ["bash","-c","date"]
