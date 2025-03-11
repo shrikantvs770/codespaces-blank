@@ -12,58 +12,40 @@ pipeline {
                     // Change the directory to the subfolder (`demo`) before running the build
                     dir('demo') {
                         // Example for Maven (change if using Gradle or other tools)
-                        sh './mvnw -fn clean package -Dmaven.test.failure.ignore=true'  // Build project inside 'demo' folder
+                        sh './mvnw -fn clean compile -Dmaven.test.failure.ignore=true'  // Build project inside 'demo' folder
                     }
                 }
             }
         }
 
-        // stage('Test') {
-        //     steps {
-        //         script {
-        //             // Run tests inside the 'demo' folder
-
-        //         dir('demo') {
-        //                 // Example for Maven (change if using Gradle or other tools)
-        //                 sh './mvnw clean install -DskipTests'  // Build project inside 'demo' folder
-        //             }
-
-        //             try {
-        //                 // Run Maven test goal
-        //                 sh 'mvn clean test -DtestFailureIgnore=true'
-        //             } catch (Exception e) {
-        //                 // Handle test failure but don't stop the pipeline
-        //                 currentBuild.result = 'UNSTABLE'
-        //                 echo "Some tests failed, but the pipeline will continue."
-        //                     dir('demo') {
-        //                 // Example for Maven (change if using Gradle or other tools)
-                        
-        //             }
-        //                                                        dir('demo') {
-        //                 junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
-        //             }
-
-        //             // Publish JaCoCo code coverage results (adjust path to coverage reports)
-        //             dir('demo') {
-        //                 recordCoverage(tools: [[parser: 'JACOCO']],
-        // id: 'jacoco', name: 'JaCoCo Coverage',
-        // sourceCodeRetention: 'EVERY_BUILD',
-        // failOnError :'false',
-        // enabledForFailure: 'false',
-        // )
-        //             }
-        //             }
-
-
-     
-        //         }
-        //     }
-        // }
-
-        stage('report publish'){
+        stage('test'){
             steps{
                 script{
-                    sh './mvnw -fn test -Dmaven.test.failure.ignore=true'
+                    dir('demo') {
+                        sh './mvnw -fn test -Dmaven.test.failure.ignore=true'
+                    }
+                }
+            }
+        }
+
+        stage('Publish Results') {
+            steps {
+                script {
+
+                    // Publish JUnit test results (adjust path to test results)
+                    dir('demo') {
+                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+                    }
+
+                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
+                    dir('demo') {
+                        recordCoverage(tools: [[parser: 'JACOCO']],
+        id: 'jacoco', name: 'JaCoCo Coverage',
+        sourceCodeRetention: 'EVERY_BUILD',
+        qualityGates: [
+                [threshold: 60.0, metric: 'LINE', baseline: 'PROJECT', unstable: true],
+                [threshold: 60.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: true]])
+                    }
                 }
             }
         }
