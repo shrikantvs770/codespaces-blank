@@ -4,24 +4,92 @@ pipeline {
         maven 'MAVEN' 
         jdk 'jdk17'
     }
-    stages {
-        stage ('Initialize') {
+    stages{
+        stage('Build') {
             steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                    java --version
-                ''' 
+                script {
+                    // Change the directory to the subfolder (`demo`) before running the build
+                    dir('demo') {
+                        // Example for Maven (change if using Gradle or other tools)
+                        sh './mvnw clean install -DskipTests'  // Build project inside 'demo' folder
+                    }
+                }
             }
         }
 
-        stage ('Build') {
+        stage('Test') {
             steps {
-                sh '''
-                    cd demo
-                    mvn clean package install spring-boot:run
-                '''
+                script {
+                    // Run tests inside the 'demo' folder
+                    dir('demo') {
+                        // Example for Maven (change if using Gradle or other tools)
+                        sh './mvnw test'  // Run tests inside 'demo' folder
+                    }
+                }
             }
         }
+        // old jacoco
+        // stage('Code Coverage') {
+        //     steps {
+        //         script {
+        //            // Generate code coverage reports for the project inside the 'demo' folder
+        //             dir('demo') {
+        //                 // Publish JaCoCo code coverage report (adjust path to report files)
+        //                   jacoco( 
+        //             execPattern: '**/target/**.exec',
+        //             classPattern: '**/target/classes',
+        //             sourcePattern: '**/src',
+        //             inclusionPattern: 'com/example/demo/**',
+             
+        //         )
+        //             }
+        //         }
+        //     }
+        // }
+
+        // stage('Publish Results') {
+        //     steps {
+        //         script {
+
+        //             // Publish JUnit test results (adjust path to test results)
+        //             // dir('demo') {
+        //             //     junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+        //             // }
+
+        //             // Publish JaCoCo code coverage results (adjust path to coverage reports)
+        //             dir('demo') {
+        //                 jacoco()  // Publish JaCoCo coverage report
+        //             }
+        //         }
+        //     }
+        // }
+
+        
+
+
+        stage('Publish Results') {
+            steps {
+                script {
+
+                    // Publish JUnit test results (adjust path to test results)
+                    dir('demo') {
+                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+                    }
+
+                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
+                    dir('demo') {
+                        recordCoverage(tools: [[parser: 'JACOCO']],
+        id: 'jacoco', name: 'JaCoCo Coverage',
+        sourceCodeRetention: 'EVERY_BUILD',
+        qualityGates: [
+                [threshold: 60.0, metric: 'LINE', baseline: 'PROJECT', unstable: true],
+                [threshold: 60.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: true]])
+                    }
+                }
+            }
+        }
+
+
+    
     }
 }
