@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    tools { 
+        maven 'MAVEN' 
+        jdk 'jdk17'
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                    java --version
+                ''' 
+            }
+        }
+
+        stage ('Build') {
+            steps {
+                sh '''
+                    cd demo
+                    mvn clean package install spring-boot:run
+                '''
+            }
+        }
+    }
+}
