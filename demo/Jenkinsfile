@@ -26,6 +26,20 @@ pipeline {
                         // Example for Maven (change if using Gradle or other tools)
                         sh './mvnw test'  // Run tests inside 'demo' folder
                     }
+                                                               dir('demo') {
+                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+                    }
+
+                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
+                    dir('demo') {
+                        recordCoverage(tools: [[parser: 'JACOCO']],
+        id: 'jacoco', name: 'JaCoCo Coverage',
+        sourceCodeRetention: 'EVERY_BUILD',
+        failOnError 'false',
+        enabledForFailure: 'false'
+        name : 'ye apna coverage hai.'
+        )
+                    }
                 }
             }
         }
@@ -44,16 +58,7 @@ pipeline {
             echo 'I am unstable :/'
         }
         failure {
-                                           dir('demo') {
-                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
-                    }
-
-                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
-                    dir('demo') {
-                        recordCoverage(tools: [[parser: 'JACOCO']],
-        id: 'jacoco', name: 'JaCoCo Coverage',
-        sourceCodeRetention: 'EVERY_BUILD')
-                    }
+            echo 'I failed'
         }
         changed {
             echo 'Things are different...'
