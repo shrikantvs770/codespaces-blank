@@ -37,7 +37,6 @@ pipeline {
         sourceCodeRetention: 'EVERY_BUILD',
         failOnError :'false',
         enabledForFailure: 'false',
-        name : 'ye apna coverage hai.'
         )
                     }
                 }
