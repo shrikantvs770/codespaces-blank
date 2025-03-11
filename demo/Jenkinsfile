@@ -44,7 +44,16 @@ pipeline {
             echo 'I am unstable :/'
         }
         failure {
-            echo 'I failed :('
+                                           dir('demo') {
+                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+                    }
+
+                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
+                    dir('demo') {
+                        recordCoverage(tools: [[parser: 'JACOCO']],
+        id: 'jacoco', name: 'JaCoCo Coverage',
+        sourceCodeRetention: 'EVERY_BUILD')
+                    }
         }
         changed {
             echo 'Things are different...'
