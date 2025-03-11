@@ -24,7 +24,7 @@ pipeline {
                     // Run tests inside the 'demo' folder
                     dir('demo') {
                         // Example for Maven (change if using Gradle or other tools)
-                        sh './mvnw test'  // Run tests inside 'demo' folder
+                        sh './mvnw -fae test'  // Run tests inside 'demo' folder
                     }
                                                                dir('demo') {
                         junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
