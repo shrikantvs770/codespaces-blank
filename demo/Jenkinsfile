@@ -11,6 +11,7 @@ pipeline {
                 script {
                     // Change the directory to the subfolder (`demo`) before running the build
                     dir('demo') {
+                        echo 'this is from br1 branch'
                         // Example for Maven (change if using Gradle or other tools)
                         sh './mvnw -fn clean compile -Dmaven.test.failure.ignore=true'  // Build project inside 'demo' folder
                     }
@@ -22,6 +23,7 @@ pipeline {
             steps{
                 script{
                     dir('demo') {
+                        echo 'this is from br1 branch'
                         sh './mvnw -fn test -Dmaven.test.failure.ignore=true'
                     }
                 }
