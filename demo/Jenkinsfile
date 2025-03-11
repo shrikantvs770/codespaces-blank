@@ -12,7 +12,7 @@ pipeline {
                     // Change the directory to the subfolder (`demo`) before running the build
                     dir('demo') {
                         // Example for Maven (change if using Gradle or other tools)
-                        sh './mvnw clean package -DtestFailureIgnore=true'  // Build project inside 'demo' folder
+                        sh './mvnw -fn clean package -DtestFailureIgnore=true'  // Build project inside 'demo' folder
                     }
                 }
             }
@@ -63,7 +63,7 @@ pipeline {
         stage('report publish'){
             steps{
                 script{
-                    sh './mvnw test -DtestFailureIgnore=true'
+                    sh './mvnw -fn test -DtestFailureIgnore=true'
                 }
             }
         }
