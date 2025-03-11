@@ -26,11 +26,6 @@ class MyCalcTest {
 	}
 
     @Test
-	void testSum3() {
-        assertEquals(3, myCalc.sum(10, 20));
-	}
-
-    @Test
 	void testdiff() {
         assertEquals(-10, myCalc.diff(10, 20));
 	}
