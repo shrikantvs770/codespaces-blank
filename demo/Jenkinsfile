@@ -35,7 +35,7 @@ pipeline {
                         recordCoverage(tools: [[parser: 'JACOCO']],
         id: 'jacoco', name: 'JaCoCo Coverage',
         sourceCodeRetention: 'EVERY_BUILD',
-        failOnError 'false',
+        failOnError :'false',
         enabledForFailure: 'false',
         name : 'ye apna coverage hai.'
         )
