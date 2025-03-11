@@ -32,14 +32,6 @@ pipeline {
     
         
     }
-    post {
-        always {
-echo 'I always :('
-        }
-        // failure {
-        //     mail to: team@example.com, subject: 'The Pipeline failed :('
-        // }
-
         post {
         always {
             echo 'I have finished'
@@ -58,5 +50,5 @@ echo 'I always :('
             echo 'Things are different...'
         }
     }
-    }
+    
 }
