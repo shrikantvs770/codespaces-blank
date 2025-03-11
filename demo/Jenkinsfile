@@ -34,19 +34,29 @@ pipeline {
     }
     post {
         always {
-                               dir('demo') {
-                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
-                    }
-
-                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
-                    dir('demo') {
-                        recordCoverage(tools: [[parser: 'JACOCO']],
-        id: 'jacoco', name: 'JaCoCo Coverage',
-        sourceCodeRetention: 'EVERY_BUILD')
-                    }
+echo 'I always :('
         }
         // failure {
         //     mail to: team@example.com, subject: 'The Pipeline failed :('
         // }
+
+        post {
+        always {
+            echo 'I have finished'
+            deleteDir() // clean up workspace
+        }
+        success {
+            echo 'I succeeded!'
+        }
+        unstable {
+            echo 'I am unstable :/'
+        }
+        failure {
+            echo 'I failed :('
+        }
+        changed {
+            echo 'Things are different...'
+        }
+    }
     }
 }
