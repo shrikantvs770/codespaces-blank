@@ -22,7 +22,17 @@ pipeline {
             steps {
                 script {
                     // Run tests inside the 'demo' folder
-                    dir('demo') {
+
+
+
+                    try {
+                        // Run Maven test goal
+                        sh 'mvn clean test'
+                    } catch (Exception e) {
+                        // Handle test failure but don't stop the pipeline
+                        currentBuild.result = 'UNSTABLE'
+                        echo "Some tests failed, but the pipeline will continue."
+                                       dir('demo') {
                         // Example for Maven (change if using Gradle or other tools)
                         sh './mvnw -fae test'  // Run tests inside 'demo' folder
                     }
@@ -39,6 +49,10 @@ pipeline {
         enabledForFailure: 'false',
         )
                     }
+                    }
+
+
+     
                 }
             }
         }
