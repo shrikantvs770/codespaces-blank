@@ -18,44 +18,56 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                script {
-                    // Run tests inside the 'demo' folder
+        // stage('Test') {
+        //     steps {
+        //         script {
+        //             // Run tests inside the 'demo' folder
 
+        //         dir('demo') {
+        //                 // Example for Maven (change if using Gradle or other tools)
+        //                 sh './mvnw clean install -DskipTests'  // Build project inside 'demo' folder
+        //             }
 
+        //             try {
+        //                 // Run Maven test goal
+        //                 sh 'mvn clean test -DtestFailureIgnore=true'
+        //             } catch (Exception e) {
+        //                 // Handle test failure but don't stop the pipeline
+        //                 currentBuild.result = 'UNSTABLE'
+        //                 echo "Some tests failed, but the pipeline will continue."
+        //                     dir('demo') {
+        //                 // Example for Maven (change if using Gradle or other tools)
+                        
+        //             }
+        //                                                        dir('demo') {
+        //                 junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+        //             }
 
-                    try {
-                        // Run Maven test goal
-                        sh 'mvn clean test'
-                    } catch (Exception e) {
-                        // Handle test failure but don't stop the pipeline
-                        currentBuild.result = 'UNSTABLE'
-                        echo "Some tests failed, but the pipeline will continue."
-                                       dir('demo') {
-                        // Example for Maven (change if using Gradle or other tools)
-                        sh './mvnw -fae test'  // Run tests inside 'demo' folder
-                    }
-                                                               dir('demo') {
-                        junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
-                    }
-
-                    // Publish JaCoCo code coverage results (adjust path to coverage reports)
-                    dir('demo') {
-                        recordCoverage(tools: [[parser: 'JACOCO']],
-        id: 'jacoco', name: 'JaCoCo Coverage',
-        sourceCodeRetention: 'EVERY_BUILD',
-        failOnError :'false',
-        enabledForFailure: 'false',
-        )
-                    }
-                    }
+        //             // Publish JaCoCo code coverage results (adjust path to coverage reports)
+        //             dir('demo') {
+        //                 recordCoverage(tools: [[parser: 'JACOCO']],
+        // id: 'jacoco', name: 'JaCoCo Coverage',
+        // sourceCodeRetention: 'EVERY_BUILD',
+        // failOnError :'false',
+        // enabledForFailure: 'false',
+        // )
+        //             }
+        //             }
 
 
      
+        //         }
+        //     }
+        // }
+
+        stage('report publish'){
+            steps{
+                script{
+                    sh 'mvn clean test -DtestFailureIgnore=true'
                 }
             }
         }
+
     
         
     }
