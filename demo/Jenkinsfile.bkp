@@ -29,12 +29,51 @@ pipeline {
                 }
             }
         }
-    
+        // old jacoco
+        // stage('Code Coverage') {
+        //     steps {
+        //         script {
+        //            // Generate code coverage reports for the project inside the 'demo' folder
+        //             dir('demo') {
+        //                 // Publish JaCoCo code coverage report (adjust path to report files)
+        //                   jacoco( 
+        //             execPattern: '**/target/**.exec',
+        //             classPattern: '**/target/classes',
+        //             sourcePattern: '**/src',
+        //             inclusionPattern: 'com/example/demo/**',
+             
+        //         )
+        //             }
+        //         }
+        //     }
+        // }
+
+        // stage('Publish Results') {
+        //     steps {
+        //         script {
+
+        //             // Publish JUnit test results (adjust path to test results)
+        //             // dir('demo') {
+        //             //     junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
+        //             // }
+
+        //             // Publish JaCoCo code coverage results (adjust path to coverage reports)
+        //             dir('demo') {
+        //                 jacoco()  // Publish JaCoCo coverage report
+        //             }
+        //         }
+        //     }
+        // }
+
         
-    }
-    post {
-        always {
-                               dir('demo') {
+
+
+        stage('Publish Results') {
+            steps {
+                script {
+
+                    // Publish JUnit test results (adjust path to test results)
+                    dir('demo') {
                         junit '**/target/surefire-reports/TEST-*.xml'  // Path to test results inside the 'demo' folder
                     }
 
@@ -47,9 +86,11 @@ pipeline {
                 [threshold: 60.0, metric: 'LINE', baseline: 'PROJECT', unstable: true],
                 [threshold: 60.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: true]])
                     }
+                }
+            }
         }
-        // failure {
-        //     mail to: team@example.com, subject: 'The Pipeline failed :('
-        // }
+
+
+    
     }
 }

@@ -22,7 +22,7 @@ class MyCalcTest {
 
     @Test
 	void testSum2() {
-        assertEquals(30, myCalc.sum(10, 20));
+        assertEquals(3, myCalc.sum(10, 20));
 	}
 
     @Test
